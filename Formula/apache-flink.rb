@@ -1,14 +1,14 @@
 class ApacheFlink < Formula
   desc "Scalable batch and stream data processing"
   homepage "https://flink.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=flink/flink-1.3.2/flink-1.3.2-bin-hadoop27-scala_2.11.tgz"
-  version "1.3.2"
-  sha256 "378be2346990264eeff2ae012175523fc94ddbe59bead7e2a76e0d93c0c7c455"
+  url "https://www.apache.org/dyn/closer.lua?path=flink/flink-1.5.0/flink-1.5.0-bin-hadoop27-scala_2.11.tgz"
+  version "1.5.0"
+  sha256 "9a8232c124c80ea447cbc2c8edcaa0b4850aecaa9d506169c968777956ccd8ff"
   head "https://github.com/apache/flink.git"
 
   bottle :unneeded
 
-  depends_on :java => "1.7+"
+  depends_on :java => "1.8+"
 
   def install
     rm_f Dir["bin/*.bat"]
@@ -17,9 +17,37 @@ class ApacheFlink < Formula
   end
 
   test do
+    input_file, output_file, expected_output = setup_test_environment
+    start_flink_cluster
+    execute_word_count(input_file, output_file)
+    stop_flink_cluster
+    output = File.open(output_file).read
+    assert_equal(expected_output, output)
+  end
+
+  def setup_test_environment
+    log_dir = testpath/"log"
+    mkdir log_dir
+    input = "foo bar foobar"
+    input_file = testpath/"input"
+    IO.write(input_file, input)
+    output_file = testpath/"result"
+    expected_output = "(foo,1)\n(bar,1)\n(foobar,1)\n"
     ENV.prepend "_JAVA_OPTIONS", "-Djava.io.tmpdir=#{testpath}"
-    input = "benv.fromElements(1,2,3).print()\n"
-    output = pipe_output("#{libexec}/bin/start-scala-shell.sh local", input, 1)
-    assert_match "FINISHED", output
+    ENV.prepend "FLINK_LOG_DIR", log_dir.to_s
+
+    [input_file, output_file, expected_output]
+  end
+
+  def start_flink_cluster
+    shell_output("#{libexec}/bin/start-cluster.sh", 0)
+  end
+
+  def execute_word_count(input_file, output_file)
+    shell_output("#{bin}/flink run -p 1 #{libexec}/examples/streaming/WordCount.jar --input #{input_file} --output #{output_file}", 0)
+  end
+
+  def stop_flink_cluster
+    shell_output("#{libexec}/bin/stop-cluster.sh", 0)
   end
 end
