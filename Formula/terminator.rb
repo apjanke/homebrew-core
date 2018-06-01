@@ -1,18 +1,9 @@
 class Terminator < Formula
   desc "Multiple terminals in one window"
   homepage "https://gnometerminator.blogspot.com/p/introduction.html"
-  revision 2
+  url "https://launchpad.net/terminator/gtk3/1.91/+download/terminator-1.91.tar.gz"
+  sha256 "95f76e3c0253956d19ceab2f8da709a496f1b9cf9b1c5b8d3cd0b6da3cc7be69"
   head "lp:terminator", :using => :bzr
-
-  stable do
-    url "https://launchpad.net/terminator/trunk/0.98/+download/terminator-0.98.tar.gz"
-    sha256 "0a6d8c9ffe36d67e60968fbf2752c521e5d498ceda42ef171ad3e966c02f26c1"
-
-    # Patch to fix cwd resolve issue for OS X / Darwin
-    # See: https://bugs.launchpad.net/terminator/+bug/1261293
-    # Should be fixed in next release after 0.98
-    patch :DATA
-  end
 
   bottle do
     cellar :any_skip_relocation
@@ -23,11 +14,12 @@ class Terminator < Formula
 
   depends_on "pkg-config" => :build
   depends_on "intltool" => :build
+  depends_on "gtk+3"
   depends_on "python@2"
-  depends_on "vte"
   depends_on "pygtk"
   depends_on "pygobject"
   depends_on "pango"
+  depends_on "vte"
 
   def install
     ENV.prepend_create_path "PYTHONPATH", lib/"python2.7/site-packages"
@@ -45,31 +37,3 @@ class Terminator < Formula
     system "#{bin}/terminator", "--version"
   end
 end
-
-__END__
-diff --git a/terminatorlib/cwd.py b/terminatorlib/cwd.py
-index 7b17d84..e3bdbad 100755
---- a/terminatorlib/cwd.py
-+++ b/terminatorlib/cwd.py
-@@ -49,6 +49,11 @@ def get_pid_cwd():
-         func = sunos_get_pid_cwd
-     else:
-         dbg('Unable to determine a get_pid_cwd for OS: %s' % system)
-+        try:
-+            import psutil
-+            func = generic_cwd
-+        except (ImportError):
-+            dbg('psutil not found')
-
-     return(func)
-
-@@ -71,4 +76,9 @@ def sunos_get_pid_cwd(pid):
-     """Determine the cwd for a given PID on SunOS kernels"""
-     return(proc_get_pid_cwd(pid, '/proc/%s/path/cwd'))
-
-+def generic_cwd(pid):
-+    """Determine the cwd using psutil which also supports Darwin"""
-+    import psutil
-+    return psutil.Process(pid).as_dict()['cwd']
-+
- # vim: set expandtab ts=4 sw=4:
