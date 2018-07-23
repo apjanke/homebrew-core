@@ -5,7 +5,6 @@ class Icu4c < Formula
   mirror "https://downloads.sourceforge.net/project/icu/ICU4C/62.1/icu4c-62_1-src.tgz"
   version "62.1"
   sha256 "3dd9868d666350dda66a6e305eecde9d479fb70b30d5b55d78a1deffb97d5aa3"
-  head "https://ssl.icu-project.org/repos/icu/trunk/icu4c/", :using => :svn
 
   bottle do
     cellar :any
@@ -14,11 +13,18 @@ class Icu4c < Formula
     sha256 "6936900be3acec316cc0d05c5fa0a07d727a2b7a3fd736bc5fd1db2be9798cb8" => :el_capitan
   end
 
+  head do
+    url "https://github.com/unicode-org/icu.git"
+    depends_on "git-lfs" => :build
+  end
+
   keg_only :provided_by_macos, "macOS provides libicucore.dylib (but nothing else)"
 
   def install
     args = %W[--prefix=#{prefix} --disable-samples --disable-tests --enable-static]
     args << "--with-library-bits=64" if MacOS.prefer_64_bit?
+
+    cd "icu4c" if build.head?
 
     cd "source" do
       system "./configure", *args
