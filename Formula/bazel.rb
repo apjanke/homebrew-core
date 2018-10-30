@@ -11,7 +11,7 @@ class Bazel < Formula
     sha256 "2d0d0b81b801212fddc912f934c8f1327306021786231f9a80e4ae42589f3f76" => :sierra
   end
 
-  depends_on :java => "1.8"
+  depends_on :java => "11"
   depends_on :macos => :yosemite
 
   def install
@@ -28,7 +28,7 @@ class Bazel < Formula
 
       bin.install "scripts/packages/bazel.sh" => "bazel"
       bin.install "output/bazel" => "bazel-real"
-      bin.env_script_all_files(libexec/"bin", Language::Java.java_home_env("1.8"))
+      bin.env_script_all_files(libexec/"bin", Language::Java.java_home_env("11"))
 
       bash_completion.install "bazel-bin/scripts/bazel-complete.bash"
       zsh_completion.install "scripts/zsh_completion/_bazel"
