@@ -16,19 +16,6 @@ class QtAT59 < Formula
   depends_on "pkg-config" => :build
   depends_on :xcode => :build
 
-  # Restore `.pc` files for framework-based build of Qt 5 on OS X. This
-  # partially reverts <https://codereview.qt-project.org/#/c/140954/> merged
-  # between the 5.5.1 and 5.6.0 releases. (Remove this as soon as feasible!)
-  #
-  # Core formulae known to fail without this patch (as of 2016-10-15):
-  #   * gnuplot  (with `--with-qt` option)
-  #   * mkvtoolnix (with `--with-qt` option, silent build failure)
-  #   * poppler    (with `--with-qt` option)
-  patch do
-    url "https://raw.githubusercontent.com/Homebrew/formula-patches/e8fe6567/qt5/restore-pc-files.patch"
-    sha256 "48ff18be2f4050de7288bddbae7f47e949512ac4bcd126c2f504be2ac701158b"
-  end
-
   # Fix for upstream issue "macdeployqt does not work with Homebrew"
   # See https://bugreports.qt.io/browse/QTBUG-56814
   # Upstream commit from 23 Dec 2016 https://github.com/qt/qttools/commit/8f9b747f030bb41556831a23ec2a8e7e76fb7dc0#diff-2b6e250f93810fd9bcf9bbecf5d2be88
