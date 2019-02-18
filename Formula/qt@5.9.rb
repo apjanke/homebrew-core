@@ -9,7 +9,7 @@ class QtAT59 < Formula
   homepage "https://www.qt.io/"
   url "https://download.qt.io/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz"
   mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz"
-  sha256 "70e617aeb1f9bbf84a12b8cf09b01ece"
+  sha256 "1c3852aa48b5a1310108382fb8f6185560cefc3802e81ecc099f4e62ee38516c"
 
   keg_only :versioned_formula
 
