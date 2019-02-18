@@ -7,9 +7,9 @@
 class QtAT59 < Formula
   desc "Cross-platform application and UI framework, Long-Term Support version"
   homepage "https://www.qt.io/"
-  url "https://download.qt.io/official_releases/qt/5.9/5.9.3/single/qt-everywhere-opensource-src-5.9.3.tar.xz"
-  mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/5.9/5.9.3/single/qt-everywhere-opensource-src-5.9.3.tar.xz"
-  sha256 "57acd8f03f830c2d7dc29fbe28aaa96781b2b9bdddce94196e6761a0f88c6046"
+  url "https://download.qt.io/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz"
+  mirror "https://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/5.9/5.9.7/single/qt-everywhere-opensource-src-5.9.7.tar.xz"
+  sha256 "70e617aeb1f9bbf84a12b8cf09b01ece"
 
   keg_only :versioned_formula
 
@@ -17,7 +17,7 @@ class QtAT59 < Formula
   depends_on :xcode => :build
 
   # Fix for upstream issue "macdeployqt does not work with Homebrew"
-  # See https://bugreports.qt.io/browse/QTBUG-56814
+  # See https://bugreports.qt.io/browse/QTBUG-56814 and https://codereview.qt-project.org/#/c/180825/
   # Upstream commit from 23 Dec 2016 https://github.com/qt/qttools/commit/8f9b747f030bb41556831a23ec2a8e7e76fb7dc0#diff-2b6e250f93810fd9bcf9bbecf5d2be88
   patch do
     url "https://raw.githubusercontent.com/Homebrew/formula-patches/a627e0a/qt5/QTBUG-56814.patch"
